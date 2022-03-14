@@ -1,10 +1,9 @@
 const express = require("express");
 const app = express();
-const fs = require("fs");
 const cors = require("cors");
-const PORT = 8080;
 const inventoryRoutes = require("./routes/inventories");
 const warehouseRoutes = require("./routes/warehouses");
+const PORT = process.env.PORT || 8080;
 
 app.use(express.json());
 app.use(cors());
