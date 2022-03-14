@@ -17,4 +17,18 @@ router.get("/inventories", (req, res) => {
   });
 });
 
+router.get("/inventories/:id", (req, res) => {
+  fs.readFile("./data/inventories.json", "utf-8", (err, data) => {
+    const allInventory = JSON.parse(data);
+    const foundInventory = allInventory.find(
+      (data) => data.id === req.params.id
+    );
+    if (err) {
+      res.send(err);
+    } else {
+      res.send(foundInventory);
+    }
+  });
+});
+
 module.exports = router;
