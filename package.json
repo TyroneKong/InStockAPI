@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.3",
+    "react-router-dom": "5.3"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "name": "instock",
+  "version": "1.0.0",
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TyroneKong/InStockAPI.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TyroneKong/InStockAPI/issues"
+  },
+  "homepage": "https://github.com/TyroneKong/InStockAPI#readme",
+  "description": ""
+}
