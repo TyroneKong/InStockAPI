@@ -1,8 +1,6 @@
-const e = require("express");
 const express = require("express");
 const fs = require("fs");
 const router = express.Router();
-const { v4: uuidv4 } = require("uuid");
 
 //inventories route
 
