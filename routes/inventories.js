@@ -1,6 +1,7 @@
 const express = require("express");
 const fs = require("fs");
 const router = express.Router();
+const { v4: uuidv4 } = require("uuid");
 
 //inventories route
 
@@ -48,6 +49,33 @@ router.delete("/inventories/:id", (req, res) => {
       }
     );
   });
+});
+
+//post/create inventory
+router.post("/inventories/create", (req, res) => {
+  const allData = JSON.parse(
+    fs.readFileSync("./data/inventories.json"),
+    "utf-8"
+  );
+  const userInput = {
+    id: uuidv4(),
+    warehouseId: req.body.warehouseid,
+    warehouseName: req.body.warehousename,
+    itemName: req.body.itemname,
+    description: req.body.description,
+    category: req.body.category,
+    status: req.body.status,
+    quantity: req.body.quantity,
+  };
+  allData.push(userInput);
+  fs.writeFile(
+    "./data/inventories.json",
+    JSON.stringify(allData),
+    res.json({
+      status: "inventory created",
+      data: allData,
+    })
+  );
 });
 
 module.exports = router;

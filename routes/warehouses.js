@@ -29,6 +29,34 @@ router.get("/warehouses/:id", (req, res) => {
     }
   });
 });
+// post/create warehouse
+router.post("/warehouses/create", (req, res) => {
+  const allData = JSON.parse(
+    fs.readFileSync("./data/warehouses.json", "utf-8")
+  );
+  const userInput = {
+    id: uuidv4(),
+    name: req.body.name,
+    address: req.body.address,
+    city: req.body.city,
+    country: req.body.country,
+    contact: {
+      name: req.body.contact.name,
+      position: req.body.contact.position,
+      phone: req.body.contact.phone,
+      email: req.body.contact.email,
+    },
+  };
+  allData.push(userInput);
+  fs.writeFile(
+    "./data/warehouses.json",
+    JSON.stringify(allData),
+    res.json({
+      status: "created",
+      data: allData,
+    })
+  );
+});
 
 // delete a warehouse
 router.delete("/warehouses/:id", (req, res) => {
