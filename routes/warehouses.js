@@ -5,6 +5,7 @@ const { v4: uuidv4 } = require("uuid");
 
 //warehouses route
 
+// get all warehouses
 router.get("/warehouses", (req, res) => {
   fs.readFile("./data/warehouses.json", "utf-8", (err, data) => {
     const allWarehouse = JSON.parse(data);
@@ -16,17 +17,29 @@ router.get("/warehouses", (req, res) => {
   });
 });
 
+// router.get("/warehouses/:id", (req, res) => {
+//   fs.readFile("./data/warehouses.json", "utf-8", (err, data) => {
+//     const allWarehouse = JSON.parse(data);
+//     const foundWarehouse = allWarehouse.find(
+//       (data) => data.id === req.params.id
+//     );
+//     if (err) {
+//       res.send(err);
+//     } else {
+//       res.send(foundWarehouse);
+//     }
+//   });
+// });
+
+// get all inventories of an specific warehouse
 router.get("/warehouses/:id", (req, res) => {
-  fs.readFile("./data/warehouses.json", "utf-8", (err, data) => {
-    const allWarehouse = JSON.parse(data);
-    const foundWarehouse = allWarehouse.find(
-      (data) => data.id === req.params.id
+  fs.readFile("./data/inventories.json", "utf-8", (err, data) => {
+    const allInventory = JSON.parse(data);
+    const foundWarehouseInventory = allInventory.filter(
+      (data) => data.warehouseID === req.params.id
     );
-    if (err) {
-      res.send(err);
-    } else {
-      res.send(foundWarehouse);
-    }
+    console.log(foundWarehouseInventory);
+    res.send(foundWarehouseInventory);
   });
 });
 
