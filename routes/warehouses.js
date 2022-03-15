@@ -29,4 +29,19 @@ router.get("/warehouses/:id", (req, res) => {
   });
 });
 
+console.log("Delete request");
+fs.readFile("./data/warehouses.json", "utf8", (err, data) => {
+  const allWarehouse = JSON.parse(data);
+  const newWarehouse = allWarehouse.filter(
+    (warehouse) => warehouse.id !== req.params.id
+  );
+
+  fs.writeFile("./data/warehouses.json", JSON.stringify(newWarehouse), () => {
+    res.json({
+      message: "Warehouse deleted from file",
+      data: newWarehouse,
+    });
+  });
+});
+
 module.exports = router;
