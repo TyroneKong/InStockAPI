@@ -17,4 +17,14 @@ router.get("/inventories", (req, res) => {
   });
 });
 
+router.get("/inventories/:warehouseID", (req, res) =>{
+  fs.readFile("./data/inventories.json", "utf8", (err, data)=>{
+    const invByWarehouse =JSON.parse(data);
+    if(err){
+      res.send("error reading inventory data")
+    } else{
+      res.send(invByWarehouse)
+    }
+  })
+})
 module.exports = router;
