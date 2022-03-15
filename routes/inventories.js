@@ -29,4 +29,25 @@ router.get("/inventories/:id", (req, res) => {
   });
 });
 
+// delete a inventorie
+router.delete("/inventories/:id", (req, res) => {
+  console.log("Delete request");
+  fs.readFile("./data/inventories.json", "utf8", (err, data) => {
+    const allInventory = JSON.parse(data);
+    const newInventory = allInventory.filter(
+      (inventory) => inventory.id !== req.params.id
+    );
+    fs.writeFile(
+      "./data/inventories.json",
+      JSON.stringify(newInventory),
+      () => {
+        res.json({
+          message: "Inventorie deleted from file",
+          data: newInventory,
+        });
+      }
+    );
+  });
+});
+
 module.exports = router;
