@@ -20,6 +20,10 @@ app.get("/", (req, res) => {
   console.log("welcome to instock server");
   res.send("You are on instock server");
 });
+app.post("/", (req, res) => {
+  console.log("welcome to instock server");
+  res.send("You are on instock server");
+});
 
 app.listen(PORT, (err) => {
   if (err) {
