@@ -29,7 +29,7 @@ router.get("/inventories/:id", (req, res) => {
   });
 });
 
-// delete a inventorie
+// delete a inventory
 router.delete("/inventories/:id", (req, res) => {
   console.log("Delete request");
   fs.readFile("./data/inventories.json", "utf8", (err, data) => {
@@ -42,7 +42,7 @@ router.delete("/inventories/:id", (req, res) => {
       JSON.stringify(newInventory),
       () => {
         res.json({
-          message: "Inventorie deleted from file",
+          message: "Inventory deleted from file",
           data: newInventory,
         });
       }
