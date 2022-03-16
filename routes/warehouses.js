@@ -17,7 +17,7 @@ router.get("/warehouses", (req, res) => {
   });
 });
 
-// get an specific warehouse
+// get a specific warehouse
 router.get("/warehouses/:id", (req, res) => {
   fs.readFile("./data/warehouses.json", "utf-8", (err, data) => {
     const allWarehouse = JSON.parse(data);
