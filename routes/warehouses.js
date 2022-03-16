@@ -44,22 +44,47 @@ router.get("/warehouses/:id/inventory", (req, res) => {
   });
 });
 
-// delete a warehouse
+// delete a warehouse and its inventory
 router.delete("/warehouses/:id", (req, res) => {
   console.log("Delete request");
+  deleteInventory(req.params.id);
+  const newWarehouse = deleteWarehouse(req.params.id);
+
+  res.json({
+    message: "Warehouse deleted from file",
+    data: newWarehouse,
+  });
+});
+
+function deleteWarehouse(id) {
   fs.readFile("./data/warehouses.json", "utf8", (err, data) => {
     const allWarehouse = JSON.parse(data);
     const newWarehouse = allWarehouse.filter(
-      (warehouse) => warehouse.id !== req.params.id
+      (warehouse) => warehouse.id !== id
     );
 
-    fs.writeFile("./data/warehouses.json", JSON.stringify(newWarehouse), () => {
-      res.json({
-        message: "Warehouse deleted from file",
-        data: newWarehouse,
-      });
-    });
+    fs.writeFile(
+      "./data/warehouses.json",
+      JSON.stringify(newWarehouse),
+      () => {}
+    );
+    return newWarehouse;
   });
-});
+}
+
+function deleteInventory(warehouseId) {
+  fs.readFile("./data/inventories.json", "utf8", (err, data) => {
+    const allInventory = JSON.parse(data);
+    const newInventory = allInventory.filter(
+      (inventory) => inventory.warehouseID !== warehouseId
+    );
+
+    fs.writeFile(
+      "./data/inventories.json",
+      JSON.stringify(newInventory),
+      () => {}
+    );
+  });
+}
 
 module.exports = router;
