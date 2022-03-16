@@ -32,7 +32,7 @@ router.get("/warehouses/:id", (req, res) => {
   });
 });
 
-// get all inventories of an specific warehouse
+// get all inventories of a specific warehouse
 router.get("/warehouses/:id/inventory", (req, res) => {
   fs.readFile("./data/inventories.json", "utf-8", (err, data) => {
     const allInventory = JSON.parse(data);
