@@ -118,51 +118,26 @@ function deleteInventory(warehouseId) {
 // warehouse put
 
 router.put('/warehouses/:id/edit-warehouse', (req, res) => {
-  const warehouseForEdit = req.params.id;
-  let emptyField = 0; 
-  const emailChars = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  const phoneChars = /^(\+\d{1})?[ ]?(\([0-9]{3}\))?[- ]?([0-9]{3})[- ]?([0-9]{4})$/
-  let i = warehouses.findIndex((warehouse) => warehouse.id === warehouseForEdit);
+  fs.readFile("./data/warehouses.json", "utf-8", (err, data) => {
+    const warehouses = JSON.parse(data);
+    const warehouseForEdit = warehouses.filter(
+      (data) => data.id === req.params.id
+    ).shift();
+  let warehouseIndex = warehouses.findIndex((warehouse) => warehouse.id === warehouseForEdit.id);
+      console.log(warehouseIndex); 
+  warehouseForEdit.name = req.body.name;
+  warehouseForEdit.address = req.body.address;
+  warehouseForEdit.city = req.body.city;
+  warehouseForEdit.country = req.body.country;
+  warehouseForEdit.contact.name = req.body.contact.name;
+  warehouseForEdit.contact.position = req.body.contact.position;
+  warehouseForEdit.contact.phone = req.body.contact.phone;
+  warehouseForEdit.contact.email = req.body.contact.email;
 
-  warehouses[i].name = req.body.name;
-  warehouses[i].address = req.body.address;
-  warehouses[i].city = req.body.city;
-  warehouses[i].country = req.body.country;
-  warehouses[i].contact.name = req.body.contact.name;
-  warehouses[i].contact.position = req.body.contact.position;
-  warehouses[i].contact.phone = req.body.contact.phone;
-  warehouses[i].contact.email = req.body.contact.email;
+  warehouses[warehouseIndex] = warehouseForEdit;
+  fs.writeFileSync("./data/warehouses.json", JSON.stringify(warehouses));
+  res.status(203).json(warehouses);
 
-  Object.values.apply(req.body).forEach(item => {
-    if(item === ""){
-      return emptyField += 1;
-    }
-  });
-    if(
-      req.body.name === "" ||
-		req.body.address === "" ||
-		req.body.city === "" ||
-		req.body.country === "" ||
-		req.body.contact.name === "" ||
-        req.body.contact.position === "" ||
-		req.body.contact.phone === "" ||
-		req.body.contact.email === ""
-    ){
-      res.status(400)
-      .send('All fields are required');
-    } else if(!warehouses[i]){
-      res.status(400).send('Warehouse not found')
-    } else if (emptyField >= 1){
-      res.status(417).send("Some required fields empty")
-    } else if (!emailChars.test(req.body.contact.email)) {
-      res.status(406).send("Email address invalid")
-    } else if (!phoneChars.test(req.body.contact.phone)){
-      res.status(406).send("Phone number invalid")
-    }
-    else {
-      fs.writeFileSync("./data/warehouses.json", JSON.stringify(warehouses));
-      res.status(202).json(warehouses);
-    }
-});
-
+})
+})
 module.exports = router;
