@@ -117,7 +117,7 @@ function deleteInventory(warehouseId) {
 
 // warehouse put
 
-router.put('warehouses/:id/edit-warehouse', (req, res) => {
+router.put('/warehouses/:id/edit-warehouse', (req, res) => {
   const warehouseForEdit = req.params.id;
   let emptyField = 0; 
   const emailChars = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
