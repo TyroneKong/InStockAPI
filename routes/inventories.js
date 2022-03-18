@@ -76,4 +76,37 @@ router.post("/inventories/create", (req, res) => {
   );
 });
 
+// put inventory
+
+router.put('inventories/:id/edit-inventory', (req, res) => {
+	const invID = req.params.id;
+	let i = inventories.findIndex((item) => item.id === invID);
+	// Change content of the item
+	inventories[i].itemName = req.body.itemName;
+	inventories[i].description = req.body.description;
+	inventories[i].category = req.body.category;
+	inventories[i].status = req.body.status;
+	inventories[i].warehouseName = req.body.warehouseName;
+	inventories[i].warehouseID = req.body.warehouseID;
+	inventories[i].quantity = req.body.quantity;
+
+	if (
+		req.body.itemName === "" ||
+		req.body.description === "" ||
+		req.body.category === "" ||
+		req.body.status === "" ||
+		req.body.warehouseName === ""
+	) {
+		res
+			.status(400)
+			.json({ messages: "All Fields are required" });
+	} else if (!inventories[i]) {
+		res.status(400).json({ messages: "Inventory not found" });
+	} else {
+		fs.writeFileSync("./data/inventories.json", JSON.stringify(inventories));
+		//Send the updated item to the user
+		res.status(201).json(inventories);
+	}
+});
+
 module.exports = router;
