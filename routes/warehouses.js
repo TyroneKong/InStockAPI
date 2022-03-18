@@ -4,17 +4,12 @@ const router = express.Router();
 const { v4: uuidv4 } = require("uuid");
 
 //warehouses route
-
+const allWarehouse = JSON.parse(
+  fs.readFileSync("./data/warehouses.json", "utf-8")
+);
 // get all warehouses
 router.get("/warehouses", (req, res) => {
-  fs.readFile("./data/warehouses.json", "utf-8", (err, data) => {
-    const allWarehouse = JSON.parse(data);
-    if (err) {
-      res.send("error reading Warehouse data");
-    } else {
-      res.send(allWarehouse);
-    }
-  });
+  res.status("200").send(allWarehouse);
 });
 
 // get a specific warehouse
@@ -33,9 +28,6 @@ router.get("/warehouses/:id", (req, res) => {
 });
 // post/create warehouse
 router.post("/warehouses/create", (req, res) => {
-  const allData = JSON.parse(
-    fs.readFileSync("./data/warehouses.json", "utf-8")
-  );
   const userInput = {
     id: uuidv4(),
     name: req.body.name,
@@ -43,19 +35,19 @@ router.post("/warehouses/create", (req, res) => {
     city: req.body.city,
     country: req.body.country,
     contact: {
-      name: req.body.contact.name,
-      position: req.body.contact.position,
-      phone: req.body.contact.phone,
-      email: req.body.contact.email,
+      name: req.body.contactname,
+      position: req.body.position,
+      phone: req.body.phone,
+      email: req.body.email,
     },
   };
-  allData.push(userInput);
+  allWarehouse.push(userInput);
   fs.writeFile(
     "./data/warehouses.json",
-    JSON.stringify(allData),
+    JSON.stringify(allWarehouse),
     res.json({
       status: "created",
-      data: allData,
+      data: allWarehouse,
     })
   );
 });
