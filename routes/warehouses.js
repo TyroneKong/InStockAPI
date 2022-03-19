@@ -86,7 +86,7 @@ function deleteWarehouse(id) {
     fs.writeFile(
       "./data/warehouses.json",
       JSON.stringify(newWarehouse),
-      () => { }
+      () => {}
     );
     return newWarehouse;
   });
@@ -102,34 +102,34 @@ function deleteInventory(warehouseId) {
     fs.writeFile(
       "./data/inventories.json",
       JSON.stringify(newInventory),
-      () => { }
+      () => {}
     );
   });
 }
 
-// warehouse put
-
-router.put('/warehouses/:id/edit-warehouse', (req, res) => {
+// edit warehouse
+router.put("/warehouses/:id/edit", (req, res) => {
   fs.readFile("./data/warehouses.json", "utf-8", (err, data) => {
     const warehouses = JSON.parse(data);
-    const warehouseForEdit = warehouses.filter(
-      (data) => data.id === req.params.id
-    ).shift();
-  let warehouseIndex = warehouses.findIndex((warehouse) => warehouse.id === warehouseForEdit.id);
-      console.log(warehouseIndex); 
-  warehouseForEdit.name = req.body.name;
-  warehouseForEdit.address = req.body.address;
-  warehouseForEdit.city = req.body.city;
-  warehouseForEdit.country = req.body.country;
-  warehouseForEdit.contact.name = req.body.contact.name;
-  warehouseForEdit.contact.position = req.body.contact.position;
-  warehouseForEdit.contact.phone = req.body.contact.phone;
-  warehouseForEdit.contact.email = req.body.contact.email;
+    const warehouseForEdit = warehouses
+      .filter((data) => data.id === req.params.id)
+      .shift();
 
-  warehouses[warehouseIndex] = warehouseForEdit;
-  fs.writeFileSync("./data/warehouses.json", JSON.stringify(warehouses));
-  res.status(203).json(warehouses);
+    let warehouseIndex = warehouses.findIndex(
+      (warehouse) => warehouse.id === warehouseForEdit.id
+    );
+    warehouseForEdit.name = req.body.name;
+    warehouseForEdit.address = req.body.address;
+    warehouseForEdit.city = req.body.city;
+    warehouseForEdit.country = req.body.country;
+    warehouseForEdit.contact.name = req.body.contact.name;
+    warehouseForEdit.contact.position = req.body.contact.position;
+    warehouseForEdit.contact.phone = req.body.contact.phone;
+    warehouseForEdit.contact.email = req.body.contact.email;
 
-})
-})
+    warehouses[warehouseIndex] = warehouseForEdit;
+    fs.writeFileSync("./data/warehouses.json", JSON.stringify(warehouses));
+    res.status(203).json(warehouses);
+  });
+});
 module.exports = router;
