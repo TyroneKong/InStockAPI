@@ -78,29 +78,29 @@ router.post("/inventories/create", (req, res) => {
   );
 });
 
-// put inventory
-
-router.put('inventories/:id/edit-inventory', (req, res) => {
-  fs.readFile("./data/inventories/json", "utf-8", (err, data)=>{
+// edit inventory
+router.put("/inventories/:id/edit", (req, res) => {
+  fs.readFile("./data/inventories.json", "utf-8", (err, data) => {
     const inventories = JSON.parse(data);
-    const inventoryForEdit = inventories.filter(
-    (data)=>data.id===req.params.id).shift();
-	let invIndex = inventories.findIndex((inventory) => inventory.id === inventoryForEdit.id);
-	// Change content of the item
-	inventoryForEdit.itemName = req.body.itemName;
-	inventoryForEdit.description = req.body.description;
-	inventoryForEdit.category = req.body.category;
-	inventoryForEdit.status = req.body.status;
-	inventoryForEdit.warehouseName = req.body.warehouseName;
-	inventoryForEdit.warehouseID = req.body.warehouseID;
-	inventoryForEdit.quantity = req.body.quantity;
+    const inventoryForEdit = inventories
+      .filter((data) => data.id === req.params.id)
+      .shift();
+    let inventoryIndex = inventories.findIndex(
+      (inventory) => inventory.id === inventoryForEdit.id
+    );
 
-  inventories[invIndex] = inventoryForEdit;
-  fs.writeFileSync("./data/inventories.json", JSON.stringify(inventories));
-  res.status(203).json(inventories); 
-	
-  })
-	
+    // Change content of the item
+    inventoryForEdit.warehouseName = req.body.warehouseName;
+    inventoryForEdit.itemName = req.body.itemName;
+    inventoryForEdit.description = req.body.description;
+    inventoryForEdit.category = req.body.category;
+    inventoryForEdit.status = req.body.status;
+    inventoryForEdit.quantity = req.body.quantity;
+
+    inventories[inventoryIndex] = inventoryForEdit;
+    fs.writeFileSync("./data/inventories.json", JSON.stringify(inventories));
+    res.status(203).json(inventories);
+  });
 });
 
 module.exports = router;
