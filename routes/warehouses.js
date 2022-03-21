@@ -43,21 +43,19 @@ router.post("/warehouses/create", (req, res) => {
     city: req.body.city,
     country: req.body.country,
     contact: {
-      name: req.body.contact.name,
-      position: req.body.contact.position,
-      phone: req.body.contact.phone,
-      email: req.body.contact.email,
+      name: req.body.contactname,
+      position: req.body.position,
+      phone: req.body.phone,
+      email: req.body.email,
     },
   };
   allData.push(userInput);
-  fs.writeFile(
-    "./data/warehouses.json",
-    JSON.stringify(allData),
+  fs.writeFile("./data/warehouses.json", JSON.stringify(allData), () => {
     res.json({
       status: "created",
       data: allData,
-    })
-  );
+    });
+  });
 });
 
 // get all inventories of a specific warehouse
@@ -94,7 +92,7 @@ function deleteWarehouse(id) {
     fs.writeFile(
       "./data/warehouses.json",
       JSON.stringify(newWarehouse),
-      () => { }
+      () => {}
     );
     return newWarehouse;
   });
@@ -110,19 +108,22 @@ function deleteInventory(warehouseId) {
     fs.writeFile(
       "./data/inventories.json",
       JSON.stringify(newInventory),
-      () => { }
+      () => {}
     );
   });
 }
 
 // warehouse put
 
-router.put('/warehouses/:id/edit-warehouse', (req, res) => {
+router.put("/warehouses/:id/edit-warehouse", (req, res) => {
   const warehouseForEdit = req.params.id;
-  let emptyField = 0; 
-  const emailChars = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  const phoneChars = /^(\+\d{1})?[ ]?(\([0-9]{3}\))?[- ]?([0-9]{3})[- ]?([0-9]{4})$/
-  let i = warehouses.findIndex((warehouse) => warehouse.id === warehouseForEdit);
+  let emptyField = 0;
+  const emailChars = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const phoneChars =
+    /^(\+\d{1})?[ ]?(\([0-9]{3}\))?[- ]?([0-9]{3})[- ]?([0-9]{4})$/;
+  let i = warehouses.findIndex(
+    (warehouse) => warehouse.id === warehouseForEdit
+  );
 
   warehouses[i].name = req.body.name;
   warehouses[i].address = req.body.address;
@@ -133,36 +134,34 @@ router.put('/warehouses/:id/edit-warehouse', (req, res) => {
   warehouses[i].contact.phone = req.body.contact.phone;
   warehouses[i].contact.email = req.body.contact.email;
 
-  Object.values.apply(req.body).forEach(item => {
-    if(item === ""){
-      return emptyField += 1;
+  Object.values.apply(req.body).forEach((item) => {
+    if (item === "") {
+      return (emptyField += 1);
     }
   });
-    if(
-      req.body.name === "" ||
-		req.body.address === "" ||
-		req.body.city === "" ||
-		req.body.country === "" ||
-		req.body.contact.name === "" ||
-        req.body.contact.position === "" ||
-		req.body.contact.phone === "" ||
-		req.body.contact.email === ""
-    ){
-      res.status(400)
-      .send('All fields are required');
-    } else if(!warehouses[i]){
-      res.status(400).send('Warehouse not found')
-    } else if (emptyField >= 1){
-      res.status(417).send("Some required fields empty")
-    } else if (!emailChars.test(req.body.contact.email)) {
-      res.status(406).send("Email address invalid")
-    } else if (!phoneChars.test(req.body.contact.phone)){
-      res.status(406).send("Phone number invalid")
-    }
-    else {
-      fs.writeFileSync("./data/warehouses.json", JSON.stringify(warehouses));
-      res.status(202).json(warehouses);
-    }
+  if (
+    req.body.name === "" ||
+    req.body.address === "" ||
+    req.body.city === "" ||
+    req.body.country === "" ||
+    req.body.contact.name === "" ||
+    req.body.contact.position === "" ||
+    req.body.contact.phone === "" ||
+    req.body.contact.email === ""
+  ) {
+    res.status(400).send("All fields are required");
+  } else if (!warehouses[i]) {
+    res.status(400).send("Warehouse not found");
+  } else if (emptyField >= 1) {
+    res.status(417).send("Some required fields empty");
+  } else if (!emailChars.test(req.body.contact.email)) {
+    res.status(406).send("Email address invalid");
+  } else if (!phoneChars.test(req.body.contact.phone)) {
+    res.status(406).send("Phone number invalid");
+  } else {
+    fs.writeFileSync("./data/warehouses.json", JSON.stringify(warehouses));
+    res.status(202).json(warehouses);
+  }
 });
 
 module.exports = router;
