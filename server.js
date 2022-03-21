@@ -25,11 +25,6 @@ app.post("/", (req, res) => {
   res.send("You are on instock server");
 });
 
-app.put("/", (req, res) => {
-  console.log("making a put request");
-  res.send("This is a put request");
-});
-
 app.listen(PORT, (err) => {
   if (err) {
     console.log(err);
