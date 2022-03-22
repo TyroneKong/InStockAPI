@@ -3,9 +3,13 @@ const fs = require("fs");
 const router = express.Router();
 const { v4: uuidv4 } = require("uuid");
 
+const allWarehouse = JSON.parse(
+  fs.readFileSync("./data/warehouses.json", "utf-8")
+);
+
 // get all warehouses
 router.get("/warehouses", (req, res) => {
-  const allWarehouse = fs.readFileSync("./data/warehouses.json", "utf-8")
+  const allWarehouse = fs.readFileSync("./data/warehouses.json", "utf-8");
   res.status("200").send(allWarehouse);
 });
 
@@ -25,7 +29,7 @@ router.get("/warehouses/:id", (req, res) => {
 });
 // post/create warehouse
 router.post("/warehouses/create", (req, res) => {
-  const allWarehouse = fs.readFileSync("./data/warehouses.json", "utf-8")
+  const allWarehouse = fs.readFileSync("./data/warehouses.json", "utf-8");
   const userInput = {
     id: uuidv4(),
     name: req.body.name,
@@ -64,11 +68,11 @@ router.get("/warehouses/:id/inventory", (req, res) => {
 router.delete("/warehouses/:id", (req, res) => {
   console.log("Delete request");
   deleteInventory(req.params.id);
-  deleteWarehouse(req.params.id, (newWarehouse)=>{
+  deleteWarehouse(req.params.id, (newWarehouse) => {
     res.json({
       message: "Warehouse deleted from file",
       data: newWarehouse,
-    })
+    });
   });
 });
 
@@ -83,8 +87,8 @@ function deleteWarehouse(id, callBack) {
       JSON.stringify(newWarehouse),
       () => {}
     );
-    callBack(newWarehouse); 
-  }); 
+    callBack(newWarehouse);
+  });
 }
 
 function deleteInventory(warehouseId) {
