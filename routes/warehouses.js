@@ -101,18 +101,14 @@ function deleteInventory(warehouseId) {
     );
   });
 }
-
-// edit warehouse
+// update a warehouse
 router.put("/warehouses/:id/edit", (req, res) => {
-  fs.readFile("./data/warehouses.json", "utf-8", (err, data) => {
-    const warehouses = JSON.parse(data);
-    const warehouseForEdit = warehouses
-      .filter((data) => data.id === req.params.id)
-      .shift();
+  const allData = allWarehouse;
+  const warehouseId = req.params.id;
 
-    let warehouseIndex = warehouses.findIndex(
-      (warehouse) => warehouse.id === warehouseForEdit.id
-    );
+  let warehouseForEdit = allData.find((current) => current.id === warehouseId);
+  console.log(warehouseForEdit);
+  if (warehouseForEdit) {
     warehouseForEdit.name = req.body.name;
     warehouseForEdit.address = req.body.address;
     warehouseForEdit.city = req.body.city;
@@ -121,38 +117,15 @@ router.put("/warehouses/:id/edit", (req, res) => {
     warehouseForEdit.contact.position = req.body.contact.position;
     warehouseForEdit.contact.phone = req.body.contact.phone;
     warehouseForEdit.contact.email = req.body.contact.email;
-
-    Object.values.apply(req.body).forEach((item) => {
-      if (item === "") {
-        return (emptyField += 1);
-      }
+    fs.writeFile("./data/warehouses.json", JSON.stringify(allWarehouse), () => {
+      res.json({
+        status: "Edit Successful!",
+      });
     });
-    if (
-      req.body.name === "" ||
-      req.body.address === "" ||
-      req.body.city === "" ||
-      req.body.country === "" ||
-      req.body.contact.name === "" ||
-      req.body.contact.position === "" ||
-      req.body.contact.phone === "" ||
-      req.body.contact.email === ""
-    ) {
-      res.status(400).send("All fields are required");
-    } else if (!warehouses[i]) {
-      res.status(400).send("Warehouse not found");
-    } else if (emptyField >= 1) {
-      res.status(417).send("Some required fields empty");
-    } else if (!emailChars.test(req.body.contact.email)) {
-      res.status(406).send("Email address invalid");
-    } else if (!phoneChars.test(req.body.contact.phone)) {
-      res.status(406).send("Phone number invalid");
-    } else {
-      fs.writeFileSync("./data/warehouses.json", JSON.stringify(warehouses));
-      res.status(202).json(warehouses);
-    }
-    warehouses[warehouseIndex] = warehouseForEdit;
-    fs.writeFileSync("./data/warehouses.json", JSON.stringify(warehouses));
-    res.status(203).json(warehouses);
-  });
+  } else {
+    res.json({
+      status: "Error!",
+    });
+  }
 });
 module.exports = router;
