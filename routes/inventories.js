@@ -56,24 +56,23 @@ router.delete("/inventories/:id", (req, res) => {
 
 //post/create inventory
 router.post("/inventories/create", (req, res) => {
+  console.log("req", req.body);
   const userInput = {
     id: uuidv4(),
-    warehouseName: req.body.warehousename,
-    itemName: req.body.itemname,
+    warehouseName: req.body.warehouseName,
+    itemName: req.body.itemName,
     description: req.body.description,
     category: req.body.category,
     status: req.body.status,
     quantity: req.body.quantity,
   };
   allInventory.push(userInput);
-  fs.writeFile(
-    "./data/inventories.json",
-    JSON.stringify(allInventory),
+  fs.writeFile("./data/inventories.json", JSON.stringify(allInventory), () => {
     res.json({
       status: "inventory created",
       data: allInventory,
-    })
-  );
+    });
+  });
 });
 
 // put inventory

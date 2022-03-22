@@ -29,7 +29,6 @@ router.get("/warehouses/:id", (req, res) => {
 });
 // post/create warehouse
 router.post("/warehouses/create", (req, res) => {
-  const allWarehouse = fs.readFileSync("./data/warehouses.json", "utf-8");
   const userInput = {
     id: uuidv4(),
     name: req.body.name,
